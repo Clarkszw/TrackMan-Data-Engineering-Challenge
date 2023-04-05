@@ -6,6 +6,7 @@ For this task, I will determine the relationships between database tables as des
 
 The full dependencies relationships set then looks like this in ascii:
 
+```bash
 games.nulls
    |
    |+crosscheck.tags
@@ -17,6 +18,7 @@ games.nulls
                        |+base.tags
                        |
                        |+dict.player_dedup
+```
 
 
 Any other notes that you think valuable for us to know
