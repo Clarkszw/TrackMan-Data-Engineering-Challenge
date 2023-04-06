@@ -108,7 +108,7 @@ def print_table_dependency(dependencies_list: list) -> None:
 
 def print_dependency_of_dependency(
         check_table: str, dependencies_list: list, depth: int) -> None:
-    """If the table has dependent table in the dependencies list,
+    """If the table has dependent tables in the dependencies list,
        print the table dependency from the list of dependencies.
 
     Parameters
@@ -158,3 +158,7 @@ def table_dependencies_graph(directory: str) -> None:
         table_dependencies.append(get_table_dependency(query))
 
     print_table_dependency(table_dependencies)
+
+
+if __name__ == '__main__':
+    table_dependencies_graph('tables')
