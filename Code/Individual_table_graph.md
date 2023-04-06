@@ -18,10 +18,6 @@ crosscheck.games
     |+rundown.location_history
     |
     |+crosscheck.tags
-         |
-         |+scout.tags
-         |
-         |+base.games
 
 crosscheck.tags
     |

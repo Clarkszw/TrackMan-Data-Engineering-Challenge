@@ -12,4 +12,13 @@ Here are the steps I take:
 6. Update the unit test for the final script.
 7. Check the documentation.
 
-Details you can find here:
+---
+
+Details you can find in Jupyter Notebook:
+[Table Dependencies Graph](./Table_Dependencies_Graph.ipynb)
+
+Module in Python:
+[get_dependencies_Graph()](./dependencies_graph.py)
+
+Unit test by Pytest:
+[test_get_dependenciies_graph.py](./test_dependencies_graph.py)
