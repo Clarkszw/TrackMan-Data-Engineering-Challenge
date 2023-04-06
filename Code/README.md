@@ -18,7 +18,7 @@ Details you can find in Jupyter Notebook:
 [Table Dependencies Graph](./Table_Dependencies_Graph.ipynb)
 
 Module in Python:
-[get_dependencies_Graph()](./dependencies_graph.py)
+[dependencies_graph)](./dependencies_graph.py)
 
 Unit test by Pytest:
-[test_get_dependenciies_graph.py](./test_dependencies_graph.py)
+[test_dependenciies_graph.py](./test_dependencies_graph.py)
