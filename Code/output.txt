@@ -1,0 +1,634 @@
+
+crosscheck.calibration_maintenance
+    |
+    |+base.calibration_maintenance
+    |
+    |+crosscheck.calibrations
+    |
+    |+crosscheck.games
+       |
+       |+base.games
+       |
+       |+base.locations
+       |
+       |+rundown.location_history
+          |
+          |+rundown.location_history_rows
+             |
+             |+rundown.locations
+       |
+       |+crosscheck.tags
+          |
+          |+scout.tags
+             |
+             |+base.tags
+             |
+             |+dict.player_dedup
+          |
+          |+base.games
+
+
+crosscheck.games
+    |
+    |+base.games
+    |
+    |+base.locations
+    |
+    |+rundown.location_history
+       |
+       |+rundown.location_history_rows
+          |
+          |+rundown.locations
+    |
+    |+crosscheck.tags
+       |
+       |+scout.tags
+          |
+          |+base.tags
+          |
+          |+dict.player_dedup
+       |
+       |+base.games
+
+
+crosscheck.tags
+    |
+    |+scout.tags
+       |
+       |+base.tags
+       |
+       |+dict.player_dedup
+    |
+    |+base.games
+
+
+games.autorecalibration
+    |
+    |+crosscheck.calibrations
+    |
+    |+crosscheck.games
+       |
+       |+base.games
+       |
+       |+base.locations
+       |
+       |+rundown.location_history
+          |
+          |+rundown.location_history_rows
+             |
+             |+rundown.locations
+       |
+       |+crosscheck.tags
+          |
+          |+scout.tags
+             |
+             |+base.tags
+             |
+             |+dict.player_dedup
+          |
+          |+base.games
+    |
+    |+crosscheck.calibration_maintenance
+       |
+       |+base.calibration_maintenance
+       |
+       |+crosscheck.calibrations
+       |
+       |+crosscheck.games
+          |
+          |+base.games
+          |
+          |+base.locations
+          |
+          |+rundown.location_history
+             |
+             |+rundown.location_history_rows
+                |
+                |+rundown.locations
+          |
+          |+crosscheck.tags
+             |
+             |+scout.tags
+                |
+                |+base.tags
+                |
+                |+dict.player_dedup
+             |
+             |+base.games
+
+
+games.latency
+    |
+    |+advance.merged_measurement
+    |
+    |+sdkjson.live_pitch_data
+    |
+    |+sdkjson.measurement
+    |
+    |+crosscheck.tags
+       |
+       |+scout.tags
+          |
+          |+base.tags
+          |
+          |+dict.player_dedup
+       |
+       |+base.games
+
+
+games.live_final
+    |
+    |+merged.measurement
+    |
+    |+merged.live_pitch_data
+    |
+    |+merged.batting_launch_data
+    |
+    |+crosscheck.tags
+       |
+       |+scout.tags
+          |
+          |+base.tags
+          |
+          |+dict.player_dedup
+       |
+       |+base.games
+
+
+games.metadata
+    |
+    |+base.games
+    |
+    |+base.locations
+    |
+    |+rundown.location_history
+       |
+       |+rundown.location_history_rows
+          |
+          |+rundown.locations
+
+
+games.nulls
+    |
+    |+crosscheck.tags
+       |
+       |+scout.tags
+          |
+          |+base.tags
+          |
+          |+dict.player_dedup
+       |
+       |+base.games
+
+
+games.oem
+    |
+    |+radar.measurement
+    |
+    |+radar.live_pitch_data
+    |
+    |+crosscheck.tags
+       |
+       |+scout.tags
+          |
+          |+base.tags
+          |
+          |+dict.player_dedup
+       |
+       |+base.games
+
+
+games.vision
+    |
+    |+vision.final_pitch_data
+    |
+    |+merged.measurement
+    |
+    |+vision.live_pitch_data
+    |
+    |+crosscheck.tags
+       |
+       |+scout.tags
+          |
+          |+base.tags
+          |
+          |+dict.player_dedup
+       |
+       |+base.games
+
+
+games.vision_oem
+    |
+    |+radar.measurement
+    |
+    |+radar.live_pitch_data
+    |
+    |+merged.measurement
+    |
+    |+vision.live_pitch_data
+    |
+    |+crosscheck.tags
+       |
+       |+scout.tags
+          |
+          |+base.tags
+          |
+          |+dict.player_dedup
+       |
+       |+base.games
+
+
+locations.latency
+    |
+    |+merged.measurement
+    |
+    |+sdkjson.live_pitch_data
+    |
+    |+sdkjson.measurement
+    |
+    |+crosscheck.tags
+       |
+       |+scout.tags
+          |
+          |+base.tags
+          |
+          |+dict.player_dedup
+       |
+       |+base.games
+    |
+    |+base.games
+
+
+locations.vision_oem
+    |
+    |+radar.measurement
+    |
+    |+radar.live_pitch_data
+    |
+    |+merged.measurement
+    |
+    |+vision.live_pitch_data
+    |
+    |+base.locations
+    |
+    |+crosscheck.tags
+       |
+       |+scout.tags
+          |
+          |+base.tags
+          |
+          |+dict.player_dedup
+       |
+       |+base.games
+
+
+report.delivered_combined_hist
+    |
+    |+report.delivered_no_exceptions_hist
+       |
+       |+report.delivered_new_pk
+          |
+          |+broadcast.delivered_games
+       |
+       |+base.games
+       |
+       |+report.exp_access_rules_hist
+          |
+          |+rundown.access_rules_end
+          |
+          |+broadcast.priority_lists
+    |
+    |+report.delivered_exceptions_hist
+       |
+       |+report.delivered_new_pk
+          |
+          |+broadcast.delivered_games
+       |
+       |+base.games
+       |
+       |+report.exp_access_rules_hist
+          |
+          |+rundown.access_rules_end
+          |
+          |+broadcast.priority_lists
+
+
+report.delivered_exceptions_hist
+    |
+    |+report.delivered_new_pk
+       |
+       |+broadcast.delivered_games
+    |
+    |+base.games
+    |
+    |+report.exp_access_rules_hist
+       |
+       |+rundown.access_rules_end
+       |
+       |+broadcast.priority_lists
+
+
+report.delivered_new_pk
+    |
+    |+broadcast.delivered_games
+
+
+report.delivered_no_exceptions
+    |
+    |+report.delivered_new_pk
+       |
+       |+broadcast.delivered_games
+    |
+    |+base.games
+    |
+    |+report.exp_access_rules
+       |
+       |+broadcast.access_rules
+       |
+       |+broadcast.priority_lists
+
+
+report.delivered_no_exceptions_hist
+    |
+    |+report.delivered_new_pk
+       |
+       |+broadcast.delivered_games
+    |
+    |+base.games
+    |
+    |+report.exp_access_rules_hist
+       |
+       |+rundown.access_rules_end
+       |
+       |+broadcast.priority_lists
+
+
+report.exp_access_rules
+    |
+    |+broadcast.access_rules
+    |
+    |+broadcast.priority_lists
+
+
+report.exp_access_rules_hist
+    |
+    |+rundown.access_rules_end
+    |
+    |+broadcast.priority_lists
+
+
+report.false_delivered_hist
+    |
+    |+report.delivered_new_pk
+       |
+       |+broadcast.delivered_games
+    |
+    |+report.delivered_combined_hist
+       |
+       |+report.delivered_no_exceptions_hist
+          |
+          |+report.delivered_new_pk
+             |
+             |+broadcast.delivered_games
+          |
+          |+base.games
+          |
+          |+report.exp_access_rules_hist
+             |
+             |+rundown.access_rules_end
+             |
+             |+broadcast.priority_lists
+       |
+       |+report.delivered_exceptions_hist
+          |
+          |+report.delivered_new_pk
+             |
+             |+broadcast.delivered_games
+          |
+          |+base.games
+          |
+          |+report.exp_access_rules_hist
+             |
+             |+rundown.access_rules_end
+             |
+             |+broadcast.priority_lists
+
+
+report.hardball_pitchers
+    |
+    |+scout.tags
+       |
+       |+base.tags
+       |
+       |+dict.player_dedup
+    |
+    |+base.measurements
+    |
+    |+base.games
+
+
+report.mlb_orgs
+    |
+    |+dict.team_org
+    |
+    |+scout.teams
+
+
+report.practice_pitching
+    |
+    |+practice.plays
+    |
+    |+practice.games
+
+
+report.practice_pitching_dev
+    |
+    |+practice.plays_dev
+    |
+    |+practice.games_dev
+
+
+report.scheduled_combined
+    |
+    |+report.scheduled_no_exceptions
+       |
+       |+lineup.schedule
+       |
+       |+games.metadata
+          |
+          |+base.games
+          |
+          |+base.locations
+          |
+          |+rundown.location_history
+             |
+             |+rundown.location_history_rows
+                |
+                |+rundown.locations
+       |
+       |+report.exp_access_rules
+          |
+          |+broadcast.access_rules
+          |
+          |+broadcast.priority_lists
+    |
+    |+report.scheduled_exceptions
+       |
+       |+lineup.schedule
+       |
+       |+games.metadata
+          |
+          |+base.games
+          |
+          |+base.locations
+          |
+          |+rundown.location_history
+             |
+             |+rundown.location_history_rows
+                |
+                |+rundown.locations
+       |
+       |+report.exp_access_rules
+          |
+          |+broadcast.access_rules
+          |
+          |+broadcast.priority_lists
+
+
+report.scheduled_exceptions
+    |
+    |+lineup.schedule
+    |
+    |+games.metadata
+       |
+       |+base.games
+       |
+       |+base.locations
+       |
+       |+rundown.location_history
+          |
+          |+rundown.location_history_rows
+             |
+             |+rundown.locations
+    |
+    |+report.exp_access_rules
+       |
+       |+broadcast.access_rules
+       |
+       |+broadcast.priority_lists
+
+
+report.scheduled_no_exceptions
+    |
+    |+lineup.schedule
+    |
+    |+games.metadata
+       |
+       |+base.games
+       |
+       |+base.locations
+       |
+       |+rundown.location_history
+          |
+          |+rundown.location_history_rows
+             |
+             |+rundown.locations
+    |
+    |+report.exp_access_rules
+       |
+       |+broadcast.access_rules
+       |
+       |+broadcast.priority_lists
+
+
+report.scheduled_no_exceptions_hist
+    |
+    |+report.schedule_new_level
+       |
+       |+lineup.schedule
+    |
+    |+games.metadata
+       |
+       |+base.games
+       |
+       |+base.locations
+       |
+       |+rundown.location_history
+          |
+          |+rundown.location_history_rows
+             |
+             |+rundown.locations
+    |
+    |+report.exp_access_rules_hist
+       |
+       |+rundown.access_rules_end
+       |
+       |+broadcast.priority_lists
+
+
+report.schedule_new_level
+    |
+    |+lineup.schedule
+
+
+report.verified_levels_18
+    |
+    |+base.locations
+    |
+    |+base.games
+    |
+    |+dict.game_type
+
+
+rundown.access_rules_history
+    |
+    |+rundown.access_rules_rows
+       |
+       |+rundown.access_rules
+       |
+       |+broadcast.access_rules
+    |
+    |+broadcast.access_rules
+
+
+rundown.access_rules_rows
+    |
+    |+rundown.access_rules
+    |
+    |+broadcast.access_rules
+
+
+rundown.location_history
+    |
+    |+rundown.location_history_rows
+       |
+       |+rundown.locations
+
+
+rundown.location_history_rows
+    |
+    |+rundown.locations
+
+
+scout.tags
+    |
+    |+base.tags
+    |
+    |+dict.player_dedup
+
+
+trout.app_angle
+    |
+    |+scout.tags
+       |
+       |+base.tags
+       |
+       |+dict.player_dedup
+    |
+    |+base.measurements
+    |
+    |+base.games
+    |
+    |+base.players
+    |
+    |+report.hardball_ref
