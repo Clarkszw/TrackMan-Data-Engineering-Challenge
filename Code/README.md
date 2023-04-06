@@ -2,23 +2,14 @@
 
 For this task, I will determine the relationships between database tables as described across a series of configuration files in JSON.
 
-## My Answer
+Here are the steps I take:
 
-The full dependencies relationships set then looks like this in ascii:
+1. Read and understand the Challenge.
+2. Check table file to get familar with JSON format.
+3. Make first code snippet to try one file.
+4. Make a unit test for the code snippet.
+5. Scale it to all tables in the directory.
+6. Update the unit test for the final script.
+7. Check the documentation.
 
-```bash
-games.nulls
-   |
-   |+crosscheck.tags
-             |
-             |+base.games
-             |
-             |+scout.tags
-                       |
-                       |+base.tags
-                       |
-                       |+dict.player_dedup
-```
-
-
-Any other notes that you think valuable for us to know
+Details you can find here:
