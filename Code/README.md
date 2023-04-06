@@ -10,7 +10,7 @@ Here are the steps I take:
 4. Make a unit test for the code snippet.
 5. Scale it to all tables in the directory.
 6. Update the unit test for the final script.
-7. Check the documentation.
+7. update the documentation.
 
 ---
 
