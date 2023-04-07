@@ -10,11 +10,11 @@ Here is the diagram of the system design I recommend for Trackman:
 
 ![final](./data-lake-infrastructure.png)
 
-> Diagram for data lake infrastructure **only** contains the logic resources for ETL processes. Other resources, like API gateway, load balancer, network security group, are **not** included in the demonsration.
+> Diagram for data lake infrastructure **only** contains the logic resources for ETL processes. Other resources, like API gateway, load balancer, network security group, are **not** included in the demonstration.
 
 In this article, I will walk through how this architecture is constructed and how it fits the technical requirements and considerations. I will introduce the selection of AWS services and best practices for cost optimization, data operation, and high availability.
 
-## Start From a Green Field
+## Start from a Green Field
 
 ![greenfield](./construction/greenfield.png)
 
@@ -43,9 +43,9 @@ The solution should do the following:
 
 * **AWS Glue**
 
-    AWS Glue is a fully managed ETL service that can be used to discover, transform, and move data between various data stores. In the data lake infrastructure, Glue can be used to transform raw data ingested from relational databases, prepare it for analysis, and load it into S3 or another data store. It also has built-in support for parallelism and job scheduleing, which will help us to optimize the ETL process.
+    AWS Glue is a fully managed ETL service that can be used to discover, transform, and move data between various data stores. In the data lake infrastructure, Glue can be used to transform raw data ingested from relational databases, prepare it for analysis, and load it into S3 or another data store. It also has built-in support for parallelism and job scheduling, which will help us to optimize the ETL process.
 
-    It could be usefule to implement a monitoring and alerting system to ensure that data is being ingested, transformed, and loaded within the specified timeframes. For example, Glue job Bookmarks can be used to keep track of the progress of a Glue ETL job. Bookmarks can be used to resume a job run from where it left off in case of a failure, and also to track the completion of a job run. Bookmarks can be queried using the AWS Glue API or console to build custom monitoring solutions.
+    It could be useful to implement a monitoring and alerting system to ensure that data is being ingested, transformed, and loaded within the specified timeframes. For example, Glue job Bookmarks can be used to keep track of the progress of a Glue ETL job. Bookmarks can be used to resume a job run from where it left off in case of a failure, and also to track the completion of a job run. Bookmarks can be queried using the AWS Glue API or console to build custom monitoring solutions.
 
 * **AWS Database Migration Service**
 
@@ -58,7 +58,7 @@ The solution should do the following:
 
 * **Amazon S3**
 
-    Amazon S3 is an object storage service that provides industry-leading scalability, data availability, security, and performance. We can  use AWS S3 as the primary data store for our data lake. The dataengineering-db will also store the ingested data for the internal application. AWS S3 will provide a scalable and cost-effective storage solution that can handle the growing volumn of data that will be ingested from variou sources in the furture.
+    Amazon S3 is an object storage service that provides industry-leading scalability, data availability, security, and performance. We can use AWS S3 as the primary data store for our data lake. The dataengineering-db will also store the ingested data for the internal application. AWS S3 will provide a scalable and cost-effective storage solution that can handle the growing volume of data that will be ingested from various sources in the future.
 
 * **Glacier Deep Archive**
 
@@ -70,7 +70,7 @@ The solution should do the following:
 
 * **AWS Backup Restore**
 
-     AWS Backup Restorecan be used to quickly and easily restore data from a backup created by AWS Backup. In the context of a data lake infrastructure, this can be useful in the event of accidental data deletion or corruption, allowing administrators to quickly restore data from a backup to minimize downtime.
+     AWS Backup Restore can be used to quickly and easily restore data from a backup created by AWS Backup. In the context of a data lake infrastructure, this can be useful in the event of accidental data deletion or corruption, allowing administrators to quickly restore data from a backup to minimize downtime.
 
 ## Compute Resources
 
@@ -120,11 +120,11 @@ AWS Cost Explorer and Cost Management can contribute to the solution by providin
 
     Cost Management, on the other hand, is a suite of tools and services that provide additional cost optimization and management capabilities. It includes services such as AWS Budgets, which allows us to set custom cost and usage budgets for our AWS resources, and AWS Cost Anomaly Detection, which uses machine learning to detect anomalies in our usage and spending patterns.
 
-## Availibility Zone
+## Availability Zone
 
 ![availibilityzone](./construction/availabilityzone.png)
 
-* **Availibility Zone**
+* **Availability Zone**
 
     An AZ is a physically separate location within an AWS region that is designed to be isolated from failures in other availability zones. By deploying resources across multiple AZs, we can improve the availability and durability of our applications and data.
 
@@ -140,7 +140,7 @@ AWS Cost Explorer and Cost Management can contribute to the solution by providin
 
 * **AWS Redshift**
 
-    AWS Redshift can fit into the solution as the data warehouse to store the data for analysts to query in the future. Redshift is a fast and scalable data warehouse solution that can handle large volumes of data and complex queries. It supports availablity zone as well.
+    AWS Redshift can fit into the solution as the data warehouse to store the data for analysts to query in the future. Redshift is a fast and scalable data warehouse solution that can handle large volumes of data and complex queries. It supports availability zone as well.
 
     The pipeline can be designed to extract data from trackman-backend and transform it into a suitable format for ingestion into Redshift. The data can be loaded into Redshift on a regular schedule, such as every hour, using AWS Glue to perform the ETL process.
 
@@ -160,28 +160,28 @@ AWS Cost Explorer and Cost Management can contribute to the solution by providin
 
 ## Aspects of the Solution
 
-* To achieve high scalability, I recommend  
+* To achieve high scalability 
 
   * Partitioning the data in S3 based on the data and time of ingestion. This will help optimize queries and reduce the cost of scanning the entire dataset.
   * Using AWS EC2 instances to host the Glue jobs and DMS instances. EC2 instances can be easily scaled up or down based on the workload demands of the jobs.
   * Using AWS ECS to run the Glue jobs in containerized environments. This allows us to easily scale the jobs horizontally to handle larger data sets and processing loads.
   * Using AWS S3's built-in capabilities, such as enabling automatic multi-part uploads, increasing the number of storage buckets, or optimizing the storage configuration to scale the data lake horizontally.
 
-* To achieve high reliability, I recommend
+* To achieve high reliability
 
   * Designing the system with fault tolerance in mind. This means designing the pipeline to handle failure gracefully and automatically retrying failed operations. For example, using `AWS Glue Bookmarks` to keep track of the progress of a Glue ETL job.
   * Considering backup and disaster recovery solutions for the data lake and data warehouse to ensure data availability and continuity in case of any issues.
   * Considering monitoring and alerting using AWS CloudWatch to monitor the health of the Glue jobs and DMS instances, as well as the data lake and dataengineering-db. This allows us to proactively address any issues before they impact the end users.
-  * Using AWS Elastic Load Balancers to distribute traffic across multiple instances of our Glue jobs and DMS instances, This ensures that if one instance fails, traffic can be automatically routed to a healthy instance without any service interruption.
+  * Using AWS Elastic Load Balancers to distribute traffic across multiple instances of our Glue jobs and DMS instances. This ensures that if one instance fails, traffic can be automatically routed to a healthy instance without any service interruption.
 
 * To achieve high maintainability, I recommend
 
   * Using a serverless architecture that reduces the need for manual intervention and maintenance.
   * Using Infrastructure as Code (IaC) to manage the AWS resources in a repeatable and consistent way. (AWS CloudFormation or Terraform)
-  * Considering AWS CodePipline to automate the building, testing, and deployment of our Glue jobs and DMS instances. This ensures that the deployment process is consisitent, repeatable, and reliable.
-  * Considering logging and tracing by AWS CloudTrail and AWS X-Ray to track and analyze te execution of our Glue jobs and DMS instances. This allows us to easily debug issues and optimize the performance of our data processing pipelines.
+  * Considering AWS Code Pipline to automate the building, testing, and deployment of our Glue jobs and DMS instances. This ensures that the deployment process is consistent, repeatable, and reliable.
+  * Considering logging and tracing by AWS CloudTrail and AWS X-Ray to track and analyze the execution of our Glue jobs and DMS instances. This allows us to easily debug issues and optimize the performance of our data processing pipelines.
 
-* Cost is a critical factor in any cloud-based solution, and I recommend designing the pipline to optimize cost. To optimize the cost of a pipeline, there are several best practices that can be followed:
+* Cost is a critical factor in any cloud-based solution, and we should properly design the pipeline to optimize cost. To optimize the cost of a pipeline, there are several best practices that can be followed:
 
   * Use cost-effective services: AWS offers a variety of services that are priced differently based on their features and usage. For example, choosing a more cost-effective data storage service, such as Amazon S3, instead of a more expensive database service can help to reduce costs. AWS Reserved Instances for the EC2 instances and Redshift cluster, S3 Glacier Deep Archive for infrequently accessed data, S3 intelligent-Tiering for data that has changing access patterns.
 
@@ -201,12 +201,14 @@ AWS Cost Explorer and Cost Management can contribute to the solution by providin
 
 * To accommodate ingesting data from other data sources in the future, we can configure Glue jobs and DMS tasks to read from and write to multiple sources and destinations, respectively.
 
+* To make data available to analysts through a data warehouse, we can use Redshift in conjunction with AWS Glue. It can provide a scalable and efficient solution for ingesting and storing data from multiple sources in the data lake, while also enabling quick access to the data for analysts and the internal application.
+
 * To optimize costs, we can use AWS Cost Explorer to monitor and optimize our AWS costs. We can also leverage cost-saving strategies such as using reserved instances, spot instances, and auto-scaling to optimize our compute resources.
 
 ## Summary
 
-After considering the technical requirements and constraints of the project, we have designed a pipeline in AWS that can ingest data from multiple tables in the trackman-backend database, transform it into a suitable format, and load it into the data lake and dataengineering-db within the required timeframes.
+After considering the technical requirements and constraints of the project, I have designed a architecture in AWS that can ingest data from multiple tables in the trackman-backend database, transform it into a suitable format, and load it into the data lake and dataengineering-db within the required timeframes.
 
 ![final](./data-lake-infrastructure.png)
 
-In conclusion, this pipeline provides a scalable and efficient solution for ingesting and storing data from multiple sources in the data lake, while also enabling quick access to the data for analysts and the internal application. Future improvements could include expanding the pipeline to ingest data from other data sources in the company, and further optimizing the ETL process for better performance and efficiency.
+Future improvements could include expanding the pipeline to ingest data from other data sources in the company (KDS, API gateway), and further optimizing the ETL process for better performance and efficiency.
