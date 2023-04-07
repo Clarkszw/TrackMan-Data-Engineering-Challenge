@@ -1,16 +1,16 @@
 # Code Challenge
 
-For this task, I will determine the relationships between database tables as described across a series of configuration files in JSON.
+For this task, I will determine the relationships between database tables as described across a series of configuration files in JSON. Details of the challenge can be found [here](http://codechallenge.trackmandata.com/).
 
-### Demo in Jupyter Notebook
+## Demo in Jupyter Notebook
 
 [Table Dependencies Graph](./Table_Dependencies_Graph.ipynb)
 
-### Module in Python
+## Module in Python
 
 [dependencies_graph](./dependencies_graph.py)
 
-### Unit test by Pytest
+## Unit test by Pytest
 
 [test_dependenciies_graph.py](./test_dependencies_graph.py)
 

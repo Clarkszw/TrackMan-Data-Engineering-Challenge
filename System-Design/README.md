@@ -2,6 +2,14 @@
 
 ## Data Lake Infrastructure
 
+For this task, I will design a pipeline in AWS for ingesting data into a data lake in S3. Details of the challenge can be found [here](http://designchallenge.trackmandata.com/).
+
+Here is the diagram of the system design I recommend for Trackman:
+
+![final](./data-lake-infrastructure.png)
+
+> Diagram for data lake infrastructure only contains the logic resources for ETL processes. Other resources, like API gateway, load balancer, network security group, are not included in the demonsration.
+
 ### Components
 
 * **AWS Glue**
