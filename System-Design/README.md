@@ -4,45 +4,161 @@
 
 For this task, I will design a pipeline in AWS for ingesting data into a data lake in S3. Details of the challenge can be found [here](http://designchallenge.trackmandata.com/).
 
+When building a new data lake infrastructure, starting from a green field can be both an opportunity and a challenge. On one hand, there is no existing infrastructure or legacy systems to contend with, providing a blank canvas for designing a scalable, flexible, and efficient data pipeline. On the other hand, starting from scratch requires careful planning, thoughtful design, and a clear understanding of the business requirements and technical constraints that need to be addressed.
+
 Here is the diagram of the system design I recommend for Trackman:
 
 ![final](./data-lake-infrastructure.png)
 
-> Diagram for data lake infrastructure only contains the logic resources for ETL processes. Other resources, like API gateway, load balancer, network security group, are not included in the demonsration.
+> Diagram for data lake infrastructure **only** contains the logic resources for ETL processes. Other resources, like API gateway, load balancer, network security group, are **not** included in the demonsration.
 
-### Components
+In this article, I will walk through how this architecture is constructed and how it fits the technical requirements and considerations. I will introduce the selection of AWS services and best practices for cost optimization, data operation, and high availability.
 
-* **AWS Glue**
+## Start From a Green Field
 
-    AWS Glue is a fully-managed extract, transform, and load (ETL) service that makes it easy to move data between data stores. I propose using AWS Glue as the primary ETL service in our pipeline. AWS Glue provides a simple and cost-effective way to crawl, transform and move data between relational databases and S3. It also has built-in support for parallelism and job scheduleing, which will help us to optimize the ETL process.
+![greenfield](./construction/greenfield.png)
 
-    AWS Glue job reads data from multiple tables in the trackman-backend database, The data is ingested into a relational database (dataengineering-db) through `AWS Database Migration Service(DMS)` within 30 minutes of its first insertion into trackman-backend.
+As a green field project, we have minimal existing infrastructure in place:
 
-    Another AWS Glue job transforms and loads the data into trackman-lake in a suitable formant within 1 hour of its first insertion into trackman-backend. `AWS Redshift` could be used as a data warehouse to make data available to analysts in the future.
+* A relation database called trackman-backend.
+* An s3 bucket called trackman-lake.
 
-    It's important to ensure that the AWS Glue jobs and DMS instances are properly configured to handle data from a production database. For example, AWS Glue job workers can be increased to handle larger datasets or parallel processing, and DMS can be configured to handle schema changes or schema mapping.
+The solution should do the following:
 
-    It could be usefule to implement a monitoring and alerting system to ensure that data is being ingested, transformed, and loaded within the specified timeframes. For example, `Glue job bookmarks` can be used to keep track of the progress of a Glue ETL job. Bookmarks can be used to resume a job run from where it left off in case of a failure, and also to track the completion of a job run. Bookmarks can be queried using the AWS Glue API or console to build custom monitoring solutions.
+* Read data from multiple different tables in trackman-backend.
+* Ingest the data into a different relational database (dataengineering-db) which will be used as the backend for an internal application.
+* Load the data into trackman-lake in a suitable format.
 
-* **AWS EC2**
+## ETL Process
 
-* **AWS ESC**
-
-* **AWS Redshift**
+![ETL](./construction/ETL.png)
 
 * **AWS Lambda**
 
-    AWS Lambda is a serverless compute service that allow us to run code without provisioning or managing servers. I propose using AWS Lambda to trigger the ETL process whenever new data is inserted into the trackman-backend database. AWS Lambda will listen to the database for new data using a trigger, and then call the AWS Glue job to extract, transform, and load the data into the dataengineering-db and trackman-lake.
+    AWS Lambda is a compute service that allows developers to run code without provisioning or managing servers. In the data lake infrastructure, Lambda functions can be used to execute specific ETL tasks, such as processing incoming data, transforming it with custom code, or triggering other AWS services in response to specific events. Lambda will listen to the database for new data using a trigger, and then call the AWS Glue job to extract, transform, and load the data into the dataengineering-db and trackman-lake.
 
-* **AWS Step Function**
+* **Step Function**
 
-    AWS Step Function is a fully-managed workflow service that makes it easy to build and run multi-step applications. i propose using AWS Step Functions to orchestrate the ETL process. The workflow will consist of multiple steps, including the ingestion data from the trackman-backend database, the transformation of data, and the loading of data into both dataengineering-db and trackman-lake. AWS Step Functions will provide us with a way to monitor the progress of the ETL process and handle any errors that occur.
+    AWS Step Functions is a fully managed service that can be used to coordinate and orchestrate multiple AWS services in a serverless manner. In the context of a data lake infrastructure, Step Functions can be used to create workflows that coordinate the different components of an ETL pipeline, such as triggering data ingestion from multiple tables in a relational database, transforming the data with AWS Glue, and loading it into S3.
+
+* **AWS Glue**
+
+    AWS Glue is a fully managed ETL service that can be used to discover, transform, and move data between various data stores. In the data lake infrastructure, Glue can be used to transform raw data ingested from relational databases, prepare it for analysis, and load it into S3 or another data store. It also has built-in support for parallelism and job scheduleing, which will help us to optimize the ETL process.
+
+    It could be usefule to implement a monitoring and alerting system to ensure that data is being ingested, transformed, and loaded within the specified timeframes. For example, Glue job Bookmarks can be used to keep track of the progress of a Glue ETL job. Bookmarks can be used to resume a job run from where it left off in case of a failure, and also to track the completion of a job run. Bookmarks can be queried using the AWS Glue API or console to build custom monitoring solutions.
+
+* **AWS Database Migration Service**
+
+    DMS is a fully managed service that can be used to migrate data from one database to another, either within AWS or across different cloud providers. In the context of a data lake infrastructure, DMS can be used to migrate data from a production database, such as trackman-backend, to another database, such as dataengineering-db, which will be used as the backend for an internal application.
+
+
+## Storage
+
+![storage](./construction/storage.png)
 
 * **Amazon S3**
 
-    Amazon S3 is an object storage service that provides industry-leading scalability, data availability, security, and performance. I propose using AWS S3 as the primary data store for our data lake. The dataengineering-db will also store the ingested data for the internal application. AWS S3 will provide a scalable and cost-effective storage solution that can handle the growing volumn of data that will be ingested from variou sources in the furture.
+    Amazon S3 is an object storage service that provides industry-leading scalability, data availability, security, and performance. We can  use AWS S3 as the primary data store for our data lake. The dataengineering-db will also store the ingested data for the internal application. AWS S3 will provide a scalable and cost-effective storage solution that can handle the growing volumn of data that will be ingested from variou sources in the furture.
 
-### Aspects of the Solution
+* **Glacier Deep Archive**
+
+    Glacier Deep Archive is a low-cost, highly durable storage service designed for long-term retention of data that is rarely accessed. In the context of a data lake infrastructure, Glacier Deep Archive can be used to store older or less frequently accessed data, helping to reduce costs by moving infrequently accessed data from S3 to Glacier Deep Archive.
+
+* **AWS Backup**
+
+    AWS Backup is a fully managed backup and recovery service that can be used to centralize and automate the backup of data across AWS services, including S3 and Glacier Deep Archive. In the context of a data lake infrastructure, AWS Backup can be used to ensure that all data stored in S3 and Glacier Deep Archive is regularly backed up to protect against data loss.
+
+* **AWS Backup Restore**
+
+     AWS Backup Restorecan be used to quickly and easily restore data from a backup created by AWS Backup. In the context of a data lake infrastructure, this can be useful in the event of accidental data deletion or corruption, allowing administrators to quickly restore data from a backup to minimize downtime.
+
+## Compute Resources
+
+![server](./construction/server.png)
+
+AWS EC2 and ECS can contribute to the solution by providing compute resources for the data lake infrastructure, and their autoscaling capabilities can help to ensure that the infrastructure can handle varying workloads and scale automatically to meet demand.
+
+* **Elastic Compute Cloud**
+
+    EC2 is a service that provides scalable compute capacity in the cloud. It allows us to launch virtual machines (EC2 instances) with a variety of operating systems and configurations to run our applications and workloads.
+
+* **Elastic Container Service**
+
+    ECS is a fully managed container orchestration service that allows us to run Docker containers in the cloud. It simplifies the management of containerized applications by handling tasks such as scaling, load balancing, and container placement.
+
+By using EC2 and ECS with the data lake infrastructure, we can deploy and run ETL jobs and other compute-intensive tasks on scalable, reliable compute resources. This can help to ensure that the infrastructure can handle varying workloads and scale automatically to meet demand.
+
+## Monitoring
+
+![monitoring](./construction/monitoring.png)
+
+AWS CloudWatch and AWS CloudTrail can contribute to the solution by providing monitoring and logging capabilities for the data lake infrastructure.
+
+* **Amazon CloudWatch**
+
+    CloudWatch is an AWS service that provides monitoring and observability for AWS resources and applications. It can be used to monitor metrics, logs, and events from our data lake infrastructure and notify us of any issues or potential problems.
+
+    By using CloudWatch with the data lake infrastructure, we can monitor key metrics such as data ingestion rates, storage usage, and resource utilization to ensure that the infrastructure is performing optimally. We can also set up alarms to notify when certain thresholds are reached or exceeded, so that we can take proactive action to prevent issues.
+
+* **AWS CloudTrail**
+
+    CloudTrail, on the other hand, is an AWS service that provides logging and auditing capabilities for AWS resources and applications. It records API calls and events for our resources, allowing to track changes, troubleshoot issues, and meet compliance requirements.
+
+    By using CloudTrail with the data lake infrastructure, we can log all API calls and events related to the data lake, such as data ingestion, storage, and access requests. This can help us to identify any security or compliance issues, as well as troubleshoot any issues that may arise.
+
+## Cost Optimization
+
+![costoptimization](./construction/cost.png)
+
+AWS Cost Explorer and Cost Management can contribute to the solution by providing insights into the cost of running the data lake infrastructure and helping to optimize costs.
+
+* **Cost Explorer**
+
+    Cost Explorer is an AWS service that provides visualization tools and reports to help us understand and manage our AWS costs. It allows us to analyze our usage and spending patterns over time, and identify areas where we can optimize our costs.
+
+* **Cost Management**
+
+    Cost Management, on the other hand, is a suite of tools and services that provide additional cost optimization and management capabilities. It includes services such as AWS Budgets, which allows us to set custom cost and usage budgets for our AWS resources, and AWS Cost Anomaly Detection, which uses machine learning to detect anomalies in our usage and spending patterns.
+
+## Availibility Zone
+
+![availibilityzone](./construction/availabilityzone.png)
+
+* **Availibility Zone**
+
+    An AZ is a physically separate location within an AWS region that is designed to be isolated from failures in other availability zones. By deploying resources across multiple AZs, we can improve the availability and durability of our applications and data.
+
+    To include AZs in the solution, the S3 bucket can be replicated across multiple availability zones within the same region. This can be done by enabling cross-AZ replication for the S3 bucket.
+
+    In addition, the ETL process can be designed to distribute the workload across multiple instances in different AZs to improve availability and fault tolerance. This can be achieved by deploying Glue jobs in multiple AZs and using a load balancer to distribute the workload.
+
+    By including availability zones in the solution, the data lake infrastructure can better withstand failures and provide high availability and durability for the ingested data.
+
+## Resources in the future
+
+![redshift](./construction/future.png)
+
+* **AWS Redshift**
+
+    AWS Redshift can fit into the solution as the data warehouse to store the data for analysts to query in the future. Redshift is a fast and scalable data warehouse solution that can handle large volumes of data and complex queries. It supports availablity zone as well.
+
+    The pipeline can be designed to extract data from trackman-backend and transform it into a suitable format for ingestion into Redshift. The data can be loaded into Redshift on a regular schedule, such as every hour, using AWS Glue to perform the ETL process.
+
+    In addition, Redshift can also be used as the backend for the internal application mentioned in the task description, eliminating the need for a separate dataengineering-db. This would simplify the pipeline and reduce the time required for data to be available in the application.
+
+    Overall, using Redshift in conjunction with AWS Glue can provide a scalable and efficient solution for ingesting and storing data from multiple sources in the data lake, while also enabling quick access to the data for analysts and the internal application.
+
+* **Amazon Kinesis Data Streams**
+
+    KDS is a fully managed streaming data service that can be used to collect and process large amounts of data in real-time. In the context of a data lake infrastructure, KDS can be used to capture real-time data from multiple sources, such as IoT devices, clickstream data, or log data, and feed it into an ETL pipeline for further processing and analysis.
+
+    One way to integrate KDS into the solution is to use it as a data source for AWS Glue, which can be configured to read data from KDS and perform transformations on it before loading it into S3 or another data store. This can allow for real-time data ingestion and processing, enabling faster insights and decision-making.
+
+    Another way to use KDS is to trigger Lambda functions in response to incoming data streams. This can be achieved using AWS Lambda and Kinesis Data Streams integration, where the Lambda function can process incoming data and take appropriate actions, such as writing data to S3, sending notifications, or triggering other AWS services.
+
+    Overall, KDS can contribute to the solution by providing real-time data ingestion and processing capabilities, which can enhance the overall data pipeline's speed, flexibility, and responsiveness to changing data needs.
+
+## Aspects of the Solution
 
 * To achieve high scalability, I recommend  
 
@@ -86,3 +202,11 @@ Here is the diagram of the system design I recommend for Trackman:
 * To accommodate ingesting data from other data sources in the future, we can configure Glue jobs and DMS tasks to read from and write to multiple sources and destinations, respectively.
 
 * To optimize costs, we can use AWS Cost Explorer to monitor and optimize our AWS costs. We can also leverage cost-saving strategies such as using reserved instances, spot instances, and auto-scaling to optimize our compute resources.
+
+## Summary
+
+After considering the technical requirements and constraints of the project, we have designed a pipeline in AWS that can ingest data from multiple tables in the trackman-backend database, transform it into a suitable format, and load it into the data lake and dataengineering-db within the required timeframes.
+
+![final](./data-lake-infrastructure.png)
+
+In conclusion, this pipeline provides a scalable and efficient solution for ingesting and storing data from multiple sources in the data lake, while also enabling quick access to the data for analysts and the internal application. Future improvements could include expanding the pipeline to ingest data from other data sources in the company, and further optimizing the ETL process for better performance and efficiency.
